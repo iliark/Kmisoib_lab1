@@ -1,15 +1,38 @@
 fun main() {
-    //task2("Pbatenghyngvbaf! Vg'f n Pnrfne pvcure!", 14)
-    //
-// task6()
-    // task3("abracadabra")
-    //println(task1encr("Amogus", 3))
-    //println(task1decr("Agmuos", 3))
-    // println(task5encrypt("zanuhni bebru", "suck"))
-    // println(task5decrypt("rupezhk tydbm", "cock"))
-    println(task4encrypt ("abracadabra", 2))
-    println(task4decrypt("bdrcccdcstc", 2))
+    var opentext = "helloworld"
+    println("Задание 1. Открытый текст: helloworld")
+    println("Шифротекст: ")
+    println(task1encr(opentext, 3))
+    println("Расшифровнный текст: ")
+    println(task1decr(task1encr(opentext, 3), 3))
+    println("Задание 2. Открытый текст: helloworld")
+    println("Шифротекст: ")
+    println(task2encr(opentext, 3, 5))
+    println("Расшифровнный текст: ")
+    println(task2decr(task2encr(opentext, 3, 5), 3, 5))
+    println("Задание 3. Открытый текст: abracadabra")
+    println("Шифротекст, расшифрованный текст: ")
+    task3("abracadabra")
+    println("Задание 4. Открытый текст: helloworld")
+    println("Шифротекст: ")
+    println(task4encrypt(opentext, 3))
+    println("Расшифровнный текст: ")
+    println(task4decrypt(task4encrypt(opentext, 3), 3))
+    println("Задание 5. Открытый текст: helloworld")
+    println("Шифротекст: ")
+    println(task5encrypt(opentext, "testkey"))
+    println("Расшифровнный текст: ")
+    println(task5decrypt(task5encrypt(opentext, "testkey"), "testkey"))
+    println("Задание 6. Поиск ключа для ROT")
+    task6()
+    println("Задание 7. Открытый текст: helloworld")
+    println("Шифротекст: ")
+    println(task7(opentext))
+    println("Расшифрованный текст:")
+    println(task7(task7(opentext)))
+
 }
+    val engAlphabet = "abcdefghijklmnopqrstuvwxyz"
 fun task1encr(opentext: String, key: Int): String {
     var resultEncr = ""
     var cur = 0
@@ -42,15 +65,17 @@ fun task1decr(crypttext: String, key: Int): CharArray {
 }
 
 
-fun task2encr(input: String, key: Int): String {
+fun task2encr(input: String, key1: Int, key2: Int): String {
     var result = ""
-    for (letter in input){
-        result += if (letter.isLetter())
-            if ((letter+key).uppercaseChar()<= 'Z') letter+key else letter+key-26
-        else letter
+    for (i in input.indices){
+        if (i % 2 != 0)
+            result += engAlphabet[Math.floorMod(engAlphabet.indexOf(input[i]) - key1, 26)]
+        else
+            result += engAlphabet[(engAlphabet.indexOf(input[i]) + key2)% 26]
     }
     return result
 }
+
 
 fun task2decr(input: String, key: Int): String {
     var result = ""
@@ -93,7 +118,6 @@ fun task3(input: String) {
     println("Decrypted: $decrypted")
 }
 fun task4encrypt(input: String, key: Int): String{
-    val engAlphabet = "abcdefghijklmnopqrstuvwxyz"
     val chunkedInput = input.chunked(2)
     var encrypted = ""
     for (pair in chunkedInput) {
@@ -106,7 +130,6 @@ fun task4encrypt(input: String, key: Int): String{
 }
 
 fun task4decrypt(input: String, key: Int): String{
-    val engAlphabet = "abcdefghijklmnopqrstuvwxyz"
     val chunkedInput = input.chunked(2)
     var decrypted = ""
     for (pair in chunkedInput) {
@@ -143,19 +166,20 @@ fun task5decrypt(crypttext: String, key: String): String{
 }
 
 fun task6() {
-    val input = "Pbatenghyngvbaf! Vg'f n Pnrfne pvcure!"
+    val input = "Pbatenghyngvbaf! Vg'f n Pnrfne pvcure!".lowercase()
     for (key in 1..26) {
         var result = ""
         for (letter in input){
-            result += if (letter.isLetter())
-                if ((letter+key).uppercaseChar()<= 'Z') letter+key else letter+key-26
-            else letter
+            if (letter in engAlphabet)
+                result+= engAlphabet[(engAlphabet.indexOf(letter) +key) % 26]
+            else
+                result += letter
         }
         println(result)
     }
 }
 
-fun task7(input: String) {
+fun task7(input: String):String {
     var result = ""
     for (letter in input) {
         result += when (letter.uppercaseChar() >= 'A' + 13) {
@@ -163,5 +187,5 @@ fun task7(input: String) {
             false -> (letter + 13)
         }
     }
-    println(result)
+    return result
 }
