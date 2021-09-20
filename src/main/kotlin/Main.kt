@@ -1,15 +1,14 @@
 fun main() {
-//    print("Enter 3-digit key: ")
-//    var key: Int = readLine()!!.toInt()
-//    print("Enter word to encrypt:")
-//    val word: String = readLine().toString()
     //task2("Pbatenghyngvbaf! Vg'f n Pnrfne pvcure!", 14)
-    //task6()
-    //task3("abracadabra")
-    println(task1encr("Amogus", 3))
-    println(task1decr("Agmuos", 3))
-//    task4encrypt ("abracadabra", 3)
-//    task4decrypt ("berdcdddsud", 3)
+    //
+// task6()
+    // task3("abracadabra")
+    //println(task1encr("Amogus", 3))
+    //println(task1decr("Agmuos", 3))
+    // println(task5encrypt("zanuhni bebru", "suck"))
+    // println(task5decrypt("rupezhk tydbm", "cock"))
+    println(task4encrypt ("abracadabra", 2))
+    println(task4decrypt("bdrcccdcstc", 2))
 }
 fun task1encr(opentext: String, key: Int): String {
     var resultEncr = ""
@@ -93,36 +92,66 @@ fun task3(input: String) {
 
     println("Decrypted: $decrypted")
 }
-fun task4encrypt(input: String, key: Int){
+fun task4encrypt(input: String, key: Int): String{
     val engAlphabet = "abcdefghijklmnopqrstuvwxyz"
     val chunkedInput = input.chunked(2)
     var encrypted = ""
     for (pair in chunkedInput) {
-        encrypted += if (pair.length == 2)
-            engAlphabet[(engAlphabet.indexOf(pair[0]) + engAlphabet.indexOf(pair[1])) % 26] + engAlphabet[(engAlphabet.indexOf(pair[1]) + key) % 26].toString()
+        if (pair.length == 2)
+            encrypted.append(engAlphabet[(engAlphabet.indexOf(pair[0]) + engAlphabet.indexOf(pair[1])) % 26].toString() + engAlphabet[(engAlphabet.indexOf(pair[1]) + key) % 26].toString())
         else
-            engAlphabet[(engAlphabet.indexOf(pair[0])+key)%26]
+            encrypted.append(engAlphabet[(engAlphabet.indexOf(pair[0])+key) % 26])
     }
-    println(encrypted)
+    return encrypted.toString()
 }
 
-fun task4decrypt(input: String, key: Int){
+fun task4decrypt(input: String, key: Int): String{
     val engAlphabet = "abcdefghijklmnopqrstuvwxyz"
     val chunkedInput = input.chunked(2)
     var decrypted = ""
     for (pair in chunkedInput) {
         if (pair.length == 2)
-            decrypted += engAlphabet[Math.floorMod(engAlphabet.indexOf(pair[0])-engAlphabet.indexOf((pair[1])-key), 26)] + engAlphabet[Math.floorMod(engAlphabet.indexOf((pair[1])-key), 26)].toString()
+            decrypted.append(engAlphabet[Math.floorMod(engAlphabet.indexOf(pair[0]) - engAlphabet.indexOf(pair[1]) + key, 26)].toString() + engAlphabet[Math.floorMod(engAlphabet.indexOf(pair[1]) - key, 26)].toString())
         else
             decrypted += engAlphabet[Math.floorMod(engAlphabet.indexOf(pair[0]-key), 26)]
     }
-    println(decrypted)
+    return decrypted.toString()
+}
+
+fun task5encrypt(opentext: String, key: String): String{
+    val engAlphabet = "abcdefghijklmnopqrstuvwxyz"
+    var result_encr = ""
+    for (i in opentext.indices) {
+        if (opentext[i] in engAlphabet)
+        result_encr += engAlphabet[(engAlphabet.indexOf(opentext[i]) + engAlphabet.indexOf(key[i % key.length])) % 26]
+        else
+        result_encr += opentext[i]
+    }
+    return result_encr
+}
+
+fun task5decrypt(crypttext: String, key: String): String{
+    val engAlphabet = "abcdefghijklmnopqrstuvwxyz"
+    var result_encr = ""
+    for (i in crypttext.indices) {
+        if (crypttext[i] in engAlphabet)
+            result_encr += engAlphabet[Math.floorMod(engAlphabet.indexOf(crypttext[i]) - engAlphabet.indexOf(key[i % key.length]), 26)]
+        else
+            result_encr += crypttext[i]
+    }
+    return result_encr
 }
 
 fun task6() {
     val input = "Pbatenghyngvbaf! Vg'f n Pnrfne pvcure!"
     for (key in 1..26) {
-        println(task2encr(input, key))
+        var result = ""
+        for (letter in input){
+            result += if (letter.isLetter())
+                if ((letter+key).uppercaseChar()<= 'Z') letter+key else letter+key-26
+            else letter
+        }
+        println(result)
     }
 }
 
